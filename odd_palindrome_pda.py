@@ -1,21 +1,17 @@
-def is_odd_palindrome_pda(string):
-    if len(string) % 2 == 0:
-        return False
+from automata.fa.dfa import DFA
+from automata.fa.nfa import NFA
+from automata.regex.regex import Regex
 
-    stack = []
-    mid = len(string) // 2
-    for i in range(mid):
-        stack.append(string[i])
-
-    for i in range(mid + 1, len(string)):
-        if string[i] != stack.pop():
-            return False
-
-    return True
-
-print(is_odd_palindrome_pda("abcba"))
-print(is_odd_palindrome_pda("racecar"))
-print(is_odd_palindrome_pda("abcdcba"))
-print(is_odd_palindrome_pda("abccba"))
-print(is_odd_palindrome_pda("a"))
-print(is_odd_palindrome_pda(""))
+class RegexToDFA:
+    def __init__(self, regex_str: str):
+        self.regex_str = regex_str
+        self.dfa = self.regex_to_dfa(regex_str)
+        
+    def regex_to_dfa(self, regex_str: str) -> DFA:
+        regex_obj = Regex(regex_str)
+        nfa = regex_obj.to_epsilon_nfa()
+        dfa = DFA.from_nfa(nfa)
+        return dfa
+    
+    def accepts(self, string: str) -> bool:
+        return self.dfa.accepts_input(string)
