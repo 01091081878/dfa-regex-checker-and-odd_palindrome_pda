@@ -1,17 +1,24 @@
-from automata.fa.dfa import DFA
-from automata.fa.nfa import NFA
-from automata.regex.regex import Regex
-
-class RegexToDFA:
-    def __init__(self, regex_str: str):
-        self.regex_str = regex_str
-        self.dfa = self.regex_to_dfa(regex_str)
+class PDA:
+    def __init__(self):
+        self.stack = []
         
-    def regex_to_dfa(self, regex_str: str) -> DFA:
-        regex_obj = Regex(regex_str)
-        nfa = regex_obj.to_epsilon_nfa()
-        dfa = DFA.from_nfa(nfa)
-        return dfa
-    
-    def accepts(self, string: str) -> bool:
-        return self.dfa.accepts_input(string)
+    def is_palindrome_odd(self, s: str) -> bool:
+        if len(s) % 2 == 0:
+            return False  
+        mid = len(s) // 2
+
+        
+        for i in range(mid):
+            self.stack.append(s[i])
+        
+        
+        i = mid + 1
+        
+       
+        
+        while i < len(s):
+            if not self.stack or s[i] != self.stack.pop():
+                return False
+            i += 1
+        
+        return len(self.stack) == 0
